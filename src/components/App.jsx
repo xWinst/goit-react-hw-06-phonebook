@@ -7,7 +7,7 @@ const App = () => {
         <div className="app">
             <h1>Phonebook</h1>
             <ContactForm />
-            <h2 style={{ margin: '20px' }}>Contacts</h2>
+            <h2>Contacts</h2>
             <Filter />
             <ContactList />
         </div>
