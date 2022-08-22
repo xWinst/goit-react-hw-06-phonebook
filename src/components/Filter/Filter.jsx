@@ -1,7 +1,13 @@
+import { useDispatch } from 'react-redux/es/exports';
+import { filterContacts } from 'redux/contactsActions';
 import s from './Filter.module.css';
-import PropTypes from 'prop-types';
 
-const Filter = ({ onChange }) => {
+const Filter = () => {
+    const dispatch = useDispatch();
+    const onChange = event => {
+        dispatch(filterContacts(event.currentTarget.value.toLowerCase()));
+    };
+
     return (
         <div className={s.container}>
             <label className={s.label}>
@@ -13,7 +19,3 @@ const Filter = ({ onChange }) => {
     );
 };
 export default Filter;
-
-Filter.propTypes = {
-    onChange: PropTypes.func.isRequired,
-};

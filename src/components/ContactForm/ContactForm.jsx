@@ -1,14 +1,33 @@
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux/es/exports';
+import { Report } from 'notiflix/build/notiflix-report-aio';
 import { FaUser, FaPhoneAlt } from 'react-icons/fa';
+import { addContact } from 'redux/contactsActions';
 import s from './ContactForm.module.css';
-import PropTypes from 'prop-types';
 
-const ContactForm = ({ onSubmit }) => {
+const ContactForm = () => {
     const [contact, setContact] = useState({ name: '', number: '' });
+    const contacts = useSelector(state => state.contacts.items);
+    const dispatch = useDispatch();
 
     const submitData = event => {
         event.preventDefault();
-        onSubmit(contact);
+        if (contacts.find(({ name }) => name === contact.name)) {
+            Report.warning(
+                `${contact.name} is already in contacts`,
+                '',
+                'I understand',
+                {
+                    width: '350px',
+                    svgSize: '100px',
+                    titleFontSize: '20px',
+                    buttonFontSize: '20px',
+                    borderRadius: '10px',
+                }
+            );
+        } else {
+            dispatch(addContact(contact));
+        }
         setContact({ name: '', number: '' });
     };
 
@@ -52,10 +71,6 @@ const ContactForm = ({ onSubmit }) => {
             </button>
         </form>
     );
-};
-
-ContactForm.propTypes = {
-    onSubmit: PropTypes.func.isRequired,
 };
 
 export default ContactForm;

@@ -1,11 +1,29 @@
+import { useEffect } from 'react';
 import { RiDeleteBin5Line } from 'react-icons/ri';
+import { useSelector, useDispatch } from 'react-redux/es/exports';
+import { deleteContact } from 'redux/contactsActions';
 import s from './ContactList.module.css';
-import PropTypes from 'prop-types';
 
-const ContactList = ({ contacts, onDelete }) => {
-    return contacts.length > 0 ? (
+const ContactList = () => {
+    const contacts = useSelector(state => state.contacts.items);
+    const filter = useSelector(state => state.contacts.filter);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        localStorage.setItem('contacts', JSON.stringify(contacts));
+    }, [contacts]);
+
+    const onDelete = id => {
+        dispatch(deleteContact(id));
+    };
+
+    const visibleList = contacts.filter(({ name }) =>
+        name.toLowerCase().includes(filter)
+    );
+
+    return visibleList.length > 0 ? (
         <ul className={s.list}>
-            {contacts.map(({ name, number, id }) => (
+            {visibleList.map(({ name, number, id }) => (
                 <li className={s.item} key={id}>
                     <p>
                         {name} : {number}
@@ -24,17 +42,6 @@ const ContactList = ({ contacts, onDelete }) => {
     ) : (
         <div className={s.list}>You haven't contacts yet</div>
     );
-};
-
-ContactList.propTypes = {
-    contacts: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.string.isRequired,
-            name: PropTypes.string.isRequired,
-            number: PropTypes.string.isRequired,
-        })
-    ).isRequired,
-    onDelete: PropTypes.func.isRequired,
 };
 
 export default ContactList;
