@@ -1,17 +1,12 @@
-import { useEffect } from 'react';
 import { RiDeleteBin5Line } from 'react-icons/ri';
 import { useSelector, useDispatch } from 'react-redux/es/exports';
 import { deleteContact } from 'redux/contactsActions';
 import s from './ContactList.module.css';
 
 const ContactList = () => {
-    const contacts = useSelector(state => state.contacts.items);
-    const filter = useSelector(state => state.contacts.filter);
+    const contacts = useSelector(state => state.items);
+    const filter = useSelector(state => state.filter);
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        localStorage.setItem('contacts', JSON.stringify(contacts));
-    }, [contacts]);
 
     const onDelete = id => {
         dispatch(deleteContact(id));
